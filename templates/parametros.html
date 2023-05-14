@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="post">
+<p class="fs-5 col-md-8">Selecione os tipos de colunas:</p>
+<table class="table table-striped">
+  <thead>
+    <tr>
+    {% for i in range(colunas) %}
+    <th>
+      <select class="form-select" name="coluna_{{i}}" id="coluna_{{i}}">
+        <option value="1">Valor</option>
+        <option value="2">Tratamento</option>
+        <option value="3">Época</option>
+        <option value="4">**Sem uso**</option>
+      </select>
+    </th>
+    {% endfor %}
+    <th><button class="btn btn-primary" type="submit" id="carregar">Analisar</button></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for i in linhas %}
+    <tr>
+      {% for j in i %}
+      <td>{{j}}</td>
+      {% endfor %}
+      <td>-</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</form>
+{% endblock content %}

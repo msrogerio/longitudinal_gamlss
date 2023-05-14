@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-body-emphasis">Análise de dados logitudinais com Gamlss</h1>
+<p class="fs-5 col-md-8">
+  Esse modelo de restruturação de saída é aplicado à análise de dados longitudinais ajustado pelo Gamlls.
+  <br>
+  <small>A distribuição usada para testes e análise foi a ODD LOG-LOGISTIC SKEW T-STUDENT, descrita
+    matematicamente:</small>
+</p>
+<div class="mb-5"> $$ Y_{ijk}=\beta _{0}+w_{i}+\underset{\textrm{efeitos longitudinais}}{\underbrace{\sum_{k=1}^{3}
+  w_{k}d_{k}}} + \underset{\textrm{efeitos hierárquicos}}{\underbrace{\sum_{i=2}^{4}\sum_{k=1}^{3}\delta
+  _{ik}d_{k}u_{i}}} + \sigma z_{ijk} $$</div>
+
+<hr class="col-3 col-md-2 mb-5">
+
+<form action="" method="post" enctype="multipart/form-data">
+  <p>Carregar conjunto de dados</p>
+  <div class="col-6 input-group">
+    <input type="file" class="form-control" aria-describedby="carregar" aria-label="Carregar" name="dados" id="dados">
+    <button class="btn btn-primary" type="submit" id="carregar">Submeter</button>
+  </div>
+  <br>
+</form>
+{% endblock content %}
