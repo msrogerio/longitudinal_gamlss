@@ -1,34 +1,96 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<a href="{{url_for('index')}}" class="btn btn-warning" widht="50px">Voltar</a>
 <form action="" method="post">
-<p class="fs-5 col-md-8">Selecione os tipos de colunas:</p>
-<table class="table table-striped">
-  <thead>
-    <tr>
-    {% for i in range(colunas) %}
-    <th>
-      <select class="form-select" name="coluna_{{i}}" id="coluna_{{i}}">
-        <option value="1">Valor</option>
-        <option value="2">Tratamento</option>
-        <option value="3">Época</option>
-        <option value="4">**Sem uso**</option>
-      </select>
-    </th>
-    {% endfor %}
-    <th><button class="btn btn-primary" type="submit" id="carregar">Analisar</button></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for i in linhas %}
-    <tr>
-      {% for j in i %}
-      <td>{{j}}</td>
+  <p class="fs-5 col-md-8">Selecione os tipos de colunas:</p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        {% for i in range(colunas) %}
+        <th>
+          <select class="form-select" name="coluna_{{i}}" id="coluna_{{i}}">
+            <option value="1">Valor</option>
+            <option value="2">Tratamento</option>
+            <option value="3">Época</option>
+            <option value="4">**Sem uso**</option>
+          </select>
+        </th>
+        {% endfor %}
+        <th>
+          <select class="form-select" name="distribuicao" id="distribuicao">
+            <option selected>Escolha a distribuição</option>
+            <option value="BE">BE</option>
+            <option value="BCCG">BCCG</option>
+            <option value="BCPE">BCPE</option>
+            <option value="BCT">BCT</option>
+            <option value="EXP">EXP</option>
+            <option value="exGAUS">exGAUS</option>
+            <option value="EGB2">EGB2</option>
+            <option value="GA">GA</option>
+            <option value="GB1">GB1</option>
+            <option value="GB2">GB2</option>
+            <option value="GG">GG</option>
+            <option value="GIG">GIG</option>
+            <option value="GT">GT</option>
+            <option value="GU">GU</option>
+            <option value="IG">IG</option>
+            <option value="NOF">NOF</option>
+            <option value="PE">PE</option>
+            <option value="RG">RG</option>
+            <option value="SEP1">SEP1</option>
+            <option value="SEP2">SEP2</option>
+            <option value="SEP3">SEP3</option>
+            <option value="SEP4">SEP4</option>
+            <option value="SHASH">SHASH</option>
+            <option value="ST1">ST1</option>
+            <option value="ST2">ST2</option>
+            <option value="ST3">ST3</option>
+            <option value="ST4">ST4</option>
+            <option value="ST5">ST5</option>
+            <option value="TF">TF</option>
+            <option value="WEI">WEI</option>
+            <option value="WEI2">WEI2</option>
+            <option value="WEI3">WEI3</option>
+            <option value="BB">BB</option>
+            <option value="BI">BI</option>
+            <option value="LG">LG</option>
+            <option value="DEL">DEL</option>
+            <option value="NBI">NBI</option>
+            <option value="NBII">NBII</option>
+            <option value="PO">PO</option>
+            <option value="PIG">PIG</option>
+            <option value="SI">SI</option>
+            <option value="SICHEL">SICHEL</option>
+            <option value="ZABB">ZABB</option>
+            <option value="ZABI">ZABI</option>
+            <option value="ZALG">ZALG</option>
+            <option value="ZANBI">ZANBI</option>
+            <option value="ZAP">ZAP</option>
+            <option value="ZIBB">ZIBB</option>
+            <option value="ZINBI">ZINBI</option>
+            <option value="ZIP">ZIP</option>
+            <option value="ZIP2">ZIP2</option>
+            <option value="ZIPIG">ZIPIG</option>
+            <option value="NO">NO</option>
+          </select>
+        </th>
+        <th>
+          <button class="btn btn-primary" type="submit" id="carregar">Analisar</button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in linhas %}
+      <tr>
+        {% for j in i %}
+        <td>{{j}}</td>
+        {% endfor %}
+        <td></td>
+        <td>-</td>
+      </tr>
       {% endfor %}
-      <td>-</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
 </form>
 {% endblock content %}

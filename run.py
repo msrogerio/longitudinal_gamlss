@@ -38,6 +38,21 @@ def analise(filename):
                 linhas_.append(i.split('\t'))
         return render_template('parametros.html', linhas=linhas_, colunas=quantidades_colunas)
     if request.method == 'POST':
+        string_json = "{\n"
         for i in request.form:
+            print(i)
             print(request.form[i])
-        return render_template('parametros.html')
+            # valor para coluna de valor
+            if request.form[i] == '1':
+                string_json += f"\t\"valor\": \"{i}\",\n"
+            if request.form[i] == '2':
+                string_json += f"\t\"tratamento\": \"{i}\",\n"
+            if request.form[i] == '3':
+                string_json += f"\t\"epoca\": \"{i}\",\n"
+        string_json += f"\t\"distribuicao\":  \"{request.form['distribuicao']}\", \n\t\"nome_arquivo\": \"{filename}\"\n"
+        string_json += "}"
+        f =  open('parameters.json', 'w')
+        f.write(string_json)
+        f.close()
+
+        return redirect(url_for('index'))

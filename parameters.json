@@ -1,7 +1,7 @@
 {
-    "arquivo": "",
-    "extensao": "",
-    "coluna_tempo": 0,
-    "coluna_tratamento": 0,
-    "coluna_valores": 0
+	"tratamento": "coluna_0",
+	"epoca": "coluna_1",
+	"valor": "coluna_2",
+	"distribuicao":  "NO", 
+	"nome_arquivo": "v5.txt"
 }
