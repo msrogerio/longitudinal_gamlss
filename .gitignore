@@ -1,2 +1,5 @@
 *.txt
 venv/
+*.csv
+*.png
+*.pdf

@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
+import os
 
 
 # inicialização da aplicação
@@ -44,15 +45,19 @@ def analise(filename):
             print(request.form[i])
             # valor para coluna de valor
             if request.form[i] == '1':
-                string_json += f"\t\"valor\": \"{i}\",\n"
+                string_json += f"\t\"valor\": {int(i)+1},\n"
             if request.form[i] == '2':
-                string_json += f"\t\"tratamento\": \"{i}\",\n"
+                string_json += f"\t\"tratamento\": {int(i)+1},\n"
             if request.form[i] == '3':
-                string_json += f"\t\"epoca\": \"{i}\",\n"
+                string_json += f"\t\"epoca\": {int(i)+1},\n"
         string_json += f"\t\"distribuicao\":  \"{request.form['distribuicao']}\", \n\t\"nome_arquivo\": \"{filename}\"\n"
         string_json += "}"
         f =  open('parameters.json', 'w')
         f.write(string_json)
-        f.close()
+        f.close()  
+
+        # Rodar shell in python
+        os.system("Rscript run.R")
+
 
         return redirect(url_for('index'))

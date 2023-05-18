@@ -6,26 +6,30 @@ library(tidyr)
 library(ggplot2)
 library(httr)
 library(sqldf)
+library(stringr)
+library(rjson)
 
+setwd('/home/marlon-rogerio/apps/longitudinal-gamlss/')
 
-#   Para o conjunto de dados r1.txt, considerar as seguintes variáveis:
-#   ESP:    relativo a espécie do feijão (== TRATAMENTO)
-#   EP:     relativo a época (== TEMPO)
-#   RESP:   relativo a resposta (== RESPOSTA)
-#   Apontamento para o diretório de trabalho e carregamento dos dados
-setwd('/home/marlon-rogerio/apps/tese-guiomar/v5')
-dados = read.table("v5.txt", h = T)
+# Pegando parametros de execusão do script
+parametros <- fromJSON(file = "parameters.json")
+parametros <- as.data.frame(parametros)
+dados = read.table(parametros$nome_arquivo, h = T)
+dados
 
-shapiro.test(dados$RESP) # Teste de normailidade
-View(dados)
+# renomear colunas
+colnames(dados)[parametros$valor] <- "valor"
+colnames(dados)[parametros$epoca] <- "epoca"
+colnames(dados)[parametros$tratamento] <- "tratamento"
 
+shapiro.test(dados$valor) # Teste de normailidade
 
 #   FUNÇÃO PARA CRIAR O CONTEXTO grupo
 #   Lê e calcula a quantidade de tratamentos, verifica se há ou não 
 #   dissonância e cria uma variável do tipo grupo, ou seja, um contexto 
 #   de agrupamento dos tratamentos.
 cria.grupo <- function(dados) {
-  base.grupo <- data.frame(dados%>%group_by(ESP)%>%count())
+  base.grupo <- data.frame(dados%>%group_by(tratamento)%>%count())
   comparador <- mean(base.grupo$n)
   grupo <- comparador
   for (i in base.grupo$n) {
@@ -34,14 +38,11 @@ cria.grupo <- function(dados) {
       break
     }
   }
-  temp <- length(dados$ESP)/comparador
+  temp <- length(dados$tratamento)/comparador
   grupo <- as.factor(rep(c(1:temp),rep(comparador,temp)))
   return(grupo)
 }
 
-d <- cria.grupo(dados = dados)
-
-d
 #   Função para quebra as string e recuperar o valor do tempo 
 #   e tratamento comparado
 #
@@ -65,7 +66,6 @@ tratamentos.tempos <- function(string_bruta_comparacoes){
     # print(string_bruta_comparacoes[cont])
     temp <- NULL
     temp <- str_split(string_bruta_comparacoes[cont], ':tratamento.removido', simplify = TRUE)
-    # print(temp)
     # Verifica se e a variável está vazia. Se esse for o caso,
     # o primero valor é inserido
     if (is.null(tratamentos.comparado)) {
@@ -143,12 +143,11 @@ ajuste.tabela <- function(t.table, tratamento.evidencia, dados) {
   )
 }
 
-
 #   Bloco de variáveis
-y <- dados$RESP
+y <- dados$valor
 grupo <- cria.grupo(dados)
-tratamento <- as.factor(dados$ESP)
-epoca <- as.factor(dados$EP)
+tratamento <- as.factor(dados$tratamento)
+epoca <- as.factor(dados$epoca)
 dados <- data.frame(y,tratamento,grupo,epoca)
 lista.tratamentos <- levels(tratamento)
 
@@ -169,16 +168,16 @@ cont <- 1
 for (i in lista.tratamentos) {
   
   tratamento.removido <- relevel(dados$tratamento, i)
-  ajuste <- gamlss(y ~ re(fixed = ~ epoca+epoca:tratamento.removido, random = ~ 1|grupo), data = dados, family = "RG", n.cyc=100)
+  ajuste <- gamlss(y ~ re(fixed = ~ epoca+epoca:tratamento.removido, random = ~ 1|grupo), data = dados, family = "NO", n.cyc=100)
   return <- summary(getSmo(ajuste))
   tabela.t <- return$tTable
   niveis.tempo <- levels(epoca)
   
-  # remove linhas específicas da tabela
+  # remove linhas tratamentoecíficas da tabela
   tabela.t <- slice(data.frame(tabela.t), -(1:length(niveis.tempo)))
   
   tabela.a <- ajuste.tabela(tabela.t, i, dados)
-  nome.arquivo <- sprintf("%s/result/%s.csv", getwd(), cont)
+  nome.arquivo <- sprintf("%s/%s.csv", getwd(), cont)
   write.table(tabela.a, file = nome.arquivo, sep=",", na="", quote=TRUE, row.names=FALSE)
   cont <- cont +1
 }
