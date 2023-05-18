@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
-import os
+import glob, os, zipfile, shutil
 
 
 # inicialização da aplicação
@@ -59,5 +59,21 @@ def analise(filename):
         # Rodar shell in python
         os.system("Rscript run.R")
 
+        # compactar arquivos
+        arquivos_csv = glob.glob('*.csv')
+        zip = zipfile.ZipFile('results.zip', 'w', zipfile.ZIP_DEFLATED)
+        for i in arquivos_csv:
+            zip.write(i)
+        zip.write('Rplots.pdf')
+        zip.write('imagem.png')
+        zip.close()
+        
+        shutil.move(os.getcwd()+ '/results.zip', os.getcwd()+ '/static/results.zip')
+        
+        return redirect(url_for('download'))
 
-        return redirect(url_for('index'))
+
+@app.route("/download", methods=['GET'])
+def download():
+    if request.method == 'GET':
+        return render_template('download.html')

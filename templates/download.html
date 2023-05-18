@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{{url_for('index')}}" class="btn btn-warning" widht="50px">Voltar</a>
+
+<br>
+<br>
+<div class="mb-5"> 
+    <p>Clique aqui para baixar os resultados do ajuste:</p>
+    <a href="{{url_for('static', filename='results.zip')}}" download>
+        resposta.zip
+    </a>
+</div>
+
+{% endblock content %}
+
